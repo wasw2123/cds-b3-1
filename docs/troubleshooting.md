@@ -2,6 +2,15 @@
 
 실습 및 배포 과정에서 발생한 문제에 대해 **증상 → 원인 가설 → 검증 방법 → 조치 내용 → 결과 → 재발 방지** 순서로 기록합니다.
 
+## 외부 접속 장애 점검 체크리스트 (공통 점검 순서)
+
+외부에서 웹 서비스 접속이 실패할 때는 아래 순서대로 좁혀가며 원인을 파악합니다:
+
+1. **라우팅(Route Table & IGW)**: Public Subnet의 Route Table에 `0.0.0.0/0 → Internet Gateway` 경로가 연결되어 있는지 확인
+2. **보안 그룹(Security Group)**: 인바운드에 `HTTP(80)`, `HTTPS(443)` (`0.0.0.0/0`) 및 `SSH(22)` (`내 공인 IP/32`)가 허용되어 있는지 확인
+3. **퍼블릭 IP / DNS**: EC2에 퍼블릭 IP(또는 Elastic IP `13.124.71.205`)가 할당되어 있고, DuckDNS(`cds-smh.duckdns.org`)가 해당 IP를 정상 반환(`nslookup`)하는지 확인
+4. **서버 프로세스 & 컨테이너**: EC2 내부에서 `docker ps`로 `nginx`, `fastapi` 컨테이너가 `Up` 상태인지, `curl -i http://localhost/health`가 `200 OK`를 반환하는지 확인
+
 ---
 
 ## 사례 1. Docker Compose 실행 후 `curl: (52) Empty reply from server` 발생
