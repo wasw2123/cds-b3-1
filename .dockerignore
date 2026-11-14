@@ -1,0 +1,13 @@
+.venv/
+.git/
+.gitignore
+docs/
+nginx/
+certbot/
+docker-compose.yml
+README.md
+__pycache__/
+*.py[cod]
+.env
+*.pem
+.DS_Store
